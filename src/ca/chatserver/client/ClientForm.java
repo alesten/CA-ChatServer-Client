@@ -24,7 +24,7 @@ public class ClientForm extends javax.swing.JFrame {
     public ClientForm() throws IOException {
         initComponents();
         String username = JOptionPane.showInputDialog("Enter a username");
-        clientControl = new ClientControl("localhost", 8888, this, username);
+        clientControl = new ClientControl("191.235.133.98", 8888, this, username);
         new Thread(clientControl).start();
     }
 

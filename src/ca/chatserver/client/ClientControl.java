@@ -19,7 +19,7 @@ import java.util.Scanner;
  *
  * @author LukaszKrawczyk
  */
-public class ClientControl extends Observable implements Runnable {
+public class ClientControl implements Runnable {
 
     Socket socket;
     private int port;
