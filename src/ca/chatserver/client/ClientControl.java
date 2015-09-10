@@ -66,7 +66,19 @@ public class ClientControl extends Observable implements Runnable {
     }
     
     public void SendToAll(String msg){
+        if(msg.isEmpty()){
+            return;
+        }
         output.println(Protocol.MSG + "*#" + msg);
+        
+    }
+    
+    public void SendToUser(String userName, String msg){
+        if(msg.isEmpty()){
+            return;
+        }
+        output.println(Protocol.MSG + userName + "#" + msg);
+        
     }
 
 }
