@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  *
  * @author LukaszKrawczyk
  */
-public class ClientForm extends javax.swing.JFrame {
+public class ClientForm extends javax.swing.JFrame implements ClientObserver{
 
     private ClientControl clientControl;
 
@@ -24,7 +24,7 @@ public class ClientForm extends javax.swing.JFrame {
     public ClientForm() throws IOException {
         initComponents();
         String username = JOptionPane.showInputDialog("Enter a username");
-        clientControl = new ClientControl("The-beast-2-0.cloudapp.net", 8888, this, username);
+        clientControl = new ClientControl("localhost", 8888, this, username);
         new Thread(clientControl).start();
     }
 
@@ -190,10 +190,12 @@ public class ClientForm extends javax.swing.JFrame {
         });
     }
 
+    @Override
     public void UpdateUserList(String userList) {
         jListUserList.setListData(userList.split("\n"));
     }
 
+    @Override
     public void AddToChat(String msg) {
         jTextAreaChat.append(msg + "\n");
     }
