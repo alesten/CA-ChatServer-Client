@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  *
  * @author LukaszKrawczyk
  */
-public class ClientForm extends javax.swing.JFrame {
+public class ClientForm extends javax.swing.JFrame implements ClientObserver{
 
     private ClientControl clientControl;
 
@@ -24,7 +24,7 @@ public class ClientForm extends javax.swing.JFrame {
     public ClientForm() throws IOException {
         initComponents();
         String username = JOptionPane.showInputDialog("Enter a username");
-        clientControl = new ClientControl("The-beast-2-0.cloudapp.net", 8888, this, username);
+        clientControl = new ClientControl("localhost", 8888, this, username);
         new Thread(clientControl).start();
     }
 
@@ -45,6 +45,7 @@ public class ClientForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jListUserList = new javax.swing.JList();
+        jTextFieldUsers = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -76,6 +77,12 @@ public class ClientForm extends javax.swing.JFrame {
         jListUserList.setFocusable(false);
         jScrollPane3.setViewportView(jListUserList);
 
+        jTextFieldUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldUsersActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -83,21 +90,22 @@ public class ClientForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jTextFieldUsers)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,7 +121,8 @@ public class ClientForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jTextFieldUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -123,11 +132,23 @@ public class ClientForm extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         clientControl.Disconnet();
     }//GEN-LAST:event_formWindowClosing
-
+    
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        clientControl.SendToAll(jTextField1.getText());
+        String text = jTextField1.getText();
+        if (jTextFieldUsers.getText().isEmpty()) {
+            clientControl.SendToAll(text);
+        }else{
+            clientControl.SendToUser(jTextFieldUsers.getText(), text);
+        }
+        jTextFieldUsers.setText(null);
         jTextField1.setText(null);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextFieldUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldUsersActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldUsersActionPerformed
 
     /**
      * @param args the command line arguments
@@ -169,10 +190,12 @@ public class ClientForm extends javax.swing.JFrame {
         });
     }
 
+    @Override
     public void UpdateUserList(String userList) {
         jListUserList.setListData(userList.split("\n"));
     }
 
+    @Override
     public void AddToChat(String msg) {
         jTextAreaChat.append(msg + "\n");
     }
@@ -186,5 +209,6 @@ public class ClientForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextAreaChat;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextFieldUsers;
     // End of variables declaration//GEN-END:variables
 }

@@ -2,8 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/C:/Users/RolfMoikjær/3.sem-Ca1/CA-ChatServer-Client/src/ca/chatserver/client/ClientControl.java</file>
+=======
+        <group/>
+        <group name="Threads1">
+            <file>file:/Users/LukaszKrawczyk/Desktop/CA2/CA-ChatServer-Client/src/ca/chatserver/client/ClientControl.java</file>
+            <file>file:/Users/LukaszKrawczyk/Desktop/CA2/CA-ChatServer-Client/src/ca/chatserver/client/ClientForm.java</file>
+>>>>>>> c8caf27822a1a0b89a63068132399d3473c1b2e4
         </group>
     </open-files>
 </project-private>

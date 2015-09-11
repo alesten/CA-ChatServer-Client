@@ -19,14 +19,14 @@ import java.util.Scanner;
  *
  * @author LukaszKrawczyk
  */
-public class ClientControl extends Observable implements Runnable {
+public class ClientControl implements Runnable {
 
     Socket socket;
     private int port;
     private InetAddress serverAddress;
     private Scanner input;
     private PrintWriter output;
-    private ClientForm clientForm;
+    private ClientObserver clientObserver;
     private String userName;
 
     public void connect(String address, int port) throws UnknownHostException, IOException {
@@ -37,8 +37,8 @@ public class ClientControl extends Observable implements Runnable {
         output = new PrintWriter(socket.getOutputStream(), true);  //Set to true, to get auto flush behaviour
     }
 
-    public ClientControl(String address, int port, ClientForm clientForm, String userName) throws IOException {
-        this.clientForm = clientForm;
+    public ClientControl(String address, int port, ClientObserver clientObserver, String userName) throws IOException {
+        this.clientObserver = clientObserver;
         this.userName = userName;
         connect(address, port);
     }
@@ -50,13 +50,13 @@ public class ClientControl extends Observable implements Runnable {
             if (msg.contains(Protocol.USERLIST)) {
                 String userlist = msg.substring(Protocol.USERLIST.length());
                 userlist = userlist.replace(",", "\n");
-                clientForm.UpdateUserList(userlist);
+                clientObserver.UpdateUserList(userlist);
             } else if (msg.contains(Protocol.MSG)) {
                 String message = msg.substring(Protocol.MSG.length());
                 String[] messageArr = message.split("[#]");
                 String sender = messageArr[0];
                 message = messageArr[1];
-                clientForm.AddToChat(sender + ": " + message);
+                clientObserver.AddToChat(sender + ": " + message);
             }
         }
     }
@@ -66,7 +66,19 @@ public class ClientControl extends Observable implements Runnable {
     }
     
     public void SendToAll(String msg){
+        if(msg.isEmpty()){
+            return;
+        }
         output.println(Protocol.MSG + "*#" + msg);
+        
+    }
+    
+    public void SendToUser(String userName, String msg){
+        if(msg.isEmpty()){
+            return;
+        }
+        output.println(Protocol.MSG + userName + "#" + msg);
+        
     }
 
 }
